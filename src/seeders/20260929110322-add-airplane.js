@@ -12,6 +12,39 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
+
+    await queryInterface.bulkInsert('Airplanes',[
+      {
+        modelNumber:'Boeing 737',
+        capacity: 300,
+        createdAt:new Date(),
+        updatedAt:new Date()
+      },
+      {
+        modelNumber:'Airbus 320',
+        capacity: 350,
+        createdAt:new Date(),
+        updatedAt:new Date()
+      },
+      {
+        modelNumber:'Boeing 777',
+        capacity: 400,
+        createdAt:new Date(),
+        updatedAt:new Date()
+      },
+      {
+        modelNumber:'Boeing 747',
+        capacity: 320,
+        createdAt:new Date(),
+        updatedAt:new Date()
+      },
+      {
+        modelNumber:'Airbus A330',
+        capacity: 150,
+        createdAt:new Date(),
+        updatedAt:new Date()
+      },
+    ],{});
   },
 
   async down (queryInterface, Sequelize) {
