@@ -1,111 +1,101 @@
-const {CityService}=require('../services/index');
+const {FlightService} = require('../services/index');
+const {SuccessCodes} = require('../utils/error-codes');
 
-const cityService=new CityService();
+const flightService=new FlightService();
 
 const create=async (req,res)=>{
-    // Method-> Post and content-> req.body
     try {
-        const city=await cityService.createCity(req.body);
-        return res.status(201).json({
-            data:city,
+        let flightRequestData={
+            flightNumber:req.body.flightNumber,
+            airplaneId:req.body.airplaneId,
+            departureAirportId:req.body.departureAirportId,
+            arrivalAirportId:req.body.arrivalAirportId,
+            arrivalTime:req.body.arrivalTime,
+            departureTime:req.body.departureTime, 
+            price:req.body.price,
+        }
+         const flight=await flightService.createFlight(flightRequestData);
+         return res.status(SuccessCodes.CREATED).json({
+            data:flight,
             success:true,
-            message:'Successfully created city',
+            message:'Successfully created flight',
             err:{}
         });
     } catch (error) {
-        console.log('Some error in controller');
+        console.log(`Something went wrong with Flight controller layer`);
         return res.status(500).json({
             data:{},
             success:false,
-            message:'Failed to create city',
-            err:error
+            message:'Failed to create flight',
+            err:error,
         });
     }
 }
-const destroy=async (req,res)=>{
-    // Method-> DELETE and url-> /city/:id
+
+
+const get= async(req,res)=>{
     try {
-        const response=await cityService.deleteCity(req.params.id);
-        return res.status(200).json({
-            data:response,
+         const flight=await flightService.getFlight(req.params.id);
+         return res.status(SuccessCodes.OK).json({
+            data:flight,
             success:true,
-            message:'Successfully deleted the city',
+            message:'Successfully fetched the flight',
             err:{}
-        });
+         });
     } catch (error) {
-        console.log('Some error in controller');
+        console.log(`Something went wrong with Flight controller layer`);
         return res.status(500).json({
             data:{},
             success:false,
-            message:'Failed to delete the city',
-            err:error
+            message:'Failed to fetch flights',
+            err:error,
         });
     }
 }
-const get=async (req,res)=>{
-    //Method-> GET and url-> /city/:id
-    try {
-        const city=await cityService.getCity(req.params.id);
-        return res.status(200).json({
-            data:city,
-            success:true,
-            message:'Successfully fetched city',
-            err:{}
-        });
-    } catch (error) {
-        console.log('Some error in controller');
-        return res.status(500).json({
-            data:{},
-            success:false,
-            message:'Failed to get city',
-            err:error
-        });
-    }
-}
+
 const getAll=async(req,res)=>{
     try {
-        const cities=await cityService.getAllCities(req.query);
-        return res.status(200).json({
-            data:cities,
+         const response=await flightService.getAllFlightData(req.query);
+         return res.status(SuccessCodes.OK).json({
+            data:response,
             success:true,
-            message:'Successfully fetched all cities',
+            message:'Successfully fetched flights',
             err:{}
-        });
+         });
     } catch (error) {
-        console.log('Some error in controller');
+        console.log(`Something went wrong with Flight controller layer`);
         return res.status(500).json({
             data:{},
             success:false,
-            message:'Failed to get cities',
-            err:error
+            message:'Failed to fetch flights',
+            err:error,
         });
     }
 }
+
 const update=async (req,res)=>{
-    //Method-> PATCH and url-> /city/:id and content-> req.body
     try {
-        const city=await cityService.updateCity(req.params.id,req.body);
-        return res.status(200).json({
-            data:city,
+         const response=await flightService.updateFlight(req.params.id,req.body);
+         return res.status(SuccessCodes.OK).json({
+            data:response,
             success:true,
-            message:'Successfully updated city',
+            message:'Successfully updated the flights',
             err:{}
-        });
+         });
     } catch (error) {
-        console.log('Some error in controller');
+        console.log(`Something went wrong with Flight controller layer`);
         return res.status(500).json({
             data:{},
             success:false,
-            message:'Failed to update city',
-            err:error
+            message:'Failed to update flights',
+            err:error,
         });
     }
 }
 
 module.exports={
     create,
-    destroy,
-    get,
     getAll,
+    get,
     update,
 }
